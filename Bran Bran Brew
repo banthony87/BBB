@@ -1,0 +1,93 @@
+""" M08 Final Project. This program will allow a customer to purchase a cup of coffee,frappucino, or hot chocolate.
+The total will be calculated from the price of beverage and sales tax. 
+    Brandon Anthony - 3/13/22
+"""
+
+from breezypythongui import EasyFrame
+from tkinter import PhotoImage
+from tkinter.font import Font
+
+def main():               #   Bran_Bran_Brew = BBB()
+    BBB().mainloop()
+
+class BBB(EasyFrame):     #computes and totals a customer order
+
+    def __init__(self):         #set up window
+        EasyFrame.__init__(self, title = "BBB", width = 1000, height = 1000)
+        #the size of the window allows for the images to fit on the screen
+        self.addLabel(text = "Thank you for choosing Bran Bran Brew. \n"
+                        "Select your item of choice. \n"
+                        " Press Total to complete your order. \n",  \
+                        row = 0, column = 1, columnspan = 2)
+
+        #Coffee row
+        self.addLabel(text = "Coffee", row = 1, column = 0)
+        self.addLabel(text = "$4.50", row = 1, column = 1)
+        self.Coffee = self.addIntegerField(row = 1, column = 1, value = 0, width = 5)     
+
+        # Frappuccino row
+        self.addLabel(text = "Frappuccino", row = 2, column = 0)
+        self.addLabel(text = "$5.50", row = 2, column = 1)
+        self.Frappuccino = self.addIntegerField(value = 0, row = 2, column = 1, width = 5)   
+
+        # Hot Chocolate row
+        self.addLabel(text = "Hot_Chocolate", row = 3, column = 0)
+        self.addLabel(text = "$4.00", row = 3, column = 1)
+        self.Hot_Chocolate = self.addIntegerField(value = 0, row = 3, column = 1, width = 5)    
+
+        #buttons for the total and delivery
+        self.totalBtn = self.addButton(text = "Total", row = 4, column = 0, \
+                                       command = self.getTotal)
+        self.deliveryBtn = self.addButton(text = "Delivery", row = 4, column = 1,\
+                                          command = self.delivery)
+        self.exitBtn = self.addButton(text = "Exit", row = 4, column = 2,
+                                          command = self.master.destroy)
+        #buttons to see images
+        self.coffeeBtn = self.addButton(text = "Coffee Image", row = 5, column = 0, \
+                                       command = self.coffeeImage)
+        self.frappuccinoBtn = self.addButton(text = "Frappuccino Image", row = 5, column = 1, \
+                                        command = self.frappuccinoImage)
+        self.hot_chocolateBtn = self.addButton(text = "Hot_Chocolate Image", row = 5, column = 2, \
+                                         command = self.hot_chocolateImage)
+        
+    def delivery(self):        # Gives customer a option on delivery
+        self.messageBox(title = "Delivery", \
+                        message = "You will be notified when your item(s) is on its way.")     
+
+    def getTotal(self):        #calculates the total, sales tax, and order total.
+        try:
+            coffeeTotal = self.Coffee.getNumber() * 4.50
+            frappuccinoTotal = self.Frappuccino.getNumber() * 5.50
+            hot_chocolateTotal = self.Hot_Chocolate.getNumber() * 4.00       
+            Total = abs(coffeeTotal + frappuccinoTotal + hot_chocolateTotal)
+            salesTax1 = Total * 0.07
+            deliveryCharge = 2.00
+            salesTax = round(salesTax1, 2)
+            orderTotal = Total + salesTax + deliveryCharge
+            self.messageBox(title = "Total", message = "The subtotal is $ " + str(Total) + ". " + \
+                               "The sales tax is (7%) $ " + str(salesTax) + "." + \
+                            "The total is $ " + str(orderTotal) + ".")
+        except ValueError:
+            self.messageBox(title = "Error", message = "Must be a positive integer.")
+    
+    def coffeeImage(self):        #image for coffee
+        imageLabel = self.addLabel(text = "", row = 0, column = 3, sticky = "NSEW")
+        textLabel = self.addLabel(text = "Coffee", row = 0, column = 4, sticky = "NSEW")
+        self.image = PhotoImage(file = "coffee.gif")
+        imageLabel["image"] = self.image
+       
+    def frappImage(self):           #image for frappuccino
+
+        imageLabel = self.addLabel(text = "", row = 0, column = 3, sticky = "NSEW")
+        textLabel = self.addLabel(text = "Frappuccino", row = 0, column = 4, sticky = "NSEW")
+        self.image = PhotoImage(file = "frappuccino.gif")
+        imageLabel["image"] = self.image
+
+    def hot_chocolateImage(self):      #image for hot_chocolate
+        imageLabel = self.addLabel(text = "", row = 0, column = 3, sticky = "NSEW")
+        textLabel = self.addLabel(text = "Hot_Chocolate", row = 0, column = 4, sticky = "NSEW")
+        self.image = PhotoImage(file = "hot_chocolate.gif")
+        imageLabel["image"] = self.image
+        
+if __name__ == "__main__":
+    main()
